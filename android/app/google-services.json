@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "885173831422",
+    "project_id": "appcampeonatofut",
+    "storage_bucket": "appcampeonatofut.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885173831422:android:1acc9dfe389551087807af",
+        "android_client_info": {
+          "package_name": "com.example.ligafut_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885173831422-mhba6tlgi9sqqafhrofnph70pocmc1s5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmTJIEX3f5Big-v4jh-3iS2bZel_fZMTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885173831422-mhba6tlgi9sqqafhrofnph70pocmc1s5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
