@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'tabla_posiciones.dart';
 
-class PantallaPrincipal extends StatelessWidget {
-  const PantallaPrincipal({super.key});
+class PantallaPrincipal extends StatefulWidget {
+  const PantallaPrincipal({Key? key}) : super(key: key);
+
+  @override
+  _PantallaPrincipalState createState() => _PantallaPrincipalState();
+}
+
+class _PantallaPrincipalState extends State<PantallaPrincipal> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    CalendariosScreen(),
+    EquiposScreen(),
+    TablaPosicionesScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -9,6 +23,62 @@ class PantallaPrincipal extends StatelessWidget {
       appBar: AppBar(
         title: Text('Inicio'),
       ),
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendarios',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group),
+            label: 'Equipos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.table_chart),
+            label: 'Tabla de Posiciones',
+          ),
+        ],
+      ),
     );
   }
+}
+
+class CalendariosScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Pantalla de Calendarios'),
+    );
+  }
+}
+
+class EquiposScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Pantalla de Equipos'),
+    );
+  }
+}
+
+class TablaPosicionesScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Pantalla de Tabla de Posiciones'),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: PantallaPrincipal(),
+  ));
 }
