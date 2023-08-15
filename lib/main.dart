@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ligafut_app/View/inicio_seccion.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ligafut_app/view/CalendarPage.dart';
 import 'package:ligafut_app/view/TeamRegistrationPage.dart';
+import 'package:ligafut_app/view/inicio_seccion.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -23,7 +23,31 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: NavigationPage(),
+      home:
+          InicioSeccionPantalla(), // Mostrar la página de inicio de sesión primero
+    );
+  }
+}
+
+class InicioSesionPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Iniciar Sesión'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Aquí puedes agregar la lógica para iniciar sesión
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => NavigationPage()),
+            );
+          },
+          child: Text('Iniciar Sesión'),
+        ),
+      ),
     );
   }
 }
