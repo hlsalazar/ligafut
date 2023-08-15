@@ -68,15 +68,6 @@ class EquiposScreen extends StatelessWidget {
   }
 }
 
-class TablaPosicionesScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Pantalla de Tabla de Posiciones'),
-    );
-  }
-}
-
 void main() {
   runApp(MaterialApp(
     home: PantallaPrincipal(),
