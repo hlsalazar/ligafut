@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ligafut_app/view/TeamRegistrationPage.dart';
+import 'package:ligafut_app/view/tabla_posiciones2.dart';
 import 'CalendarPage.dart';
 import 'mostrar_equipos.dart';
 import 'tabla_posiciones.dart';
@@ -16,8 +17,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
   final List<Widget> _pages = [
     CalendarPage(),
     TeamRegistrationPage(),
-    TablaPosicionesScreen(),
-    ListaEquiposPantalla()
+    //TablaPosicionesScreen(),
+    ListaEquiposPantalla(),
+    TablaPosicionesScreen2()
   ];
 
   @override
@@ -42,12 +44,12 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
             label: 'Registro',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.table_chart),
-            label: 'Configuraciones',
+            icon: Icon(Icons.group),
+            label: 'Equipos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
-            label: 'Equipos',
+            label: 'Tabla',
           ),
         ],
       ),
