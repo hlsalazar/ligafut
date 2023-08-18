@@ -147,7 +147,7 @@ class _InicioSeccionPantallaState extends State<InicioSeccionPantalla> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const PantallaInicio(),
+                builder: (context) => const PantallaPrincipal(),
               ),
             );
           } else {

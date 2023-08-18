@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:ligafut_app/View/inicio_seccion.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ligafut_app/view/inicio_seccion.dart';
 import 'package:ligafut_app/view/mostrar_equipos.dart';
 import 'firebase_options.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ListaEquiposPantalla(),
+      home: InicioSeccionPantalla(),
     );
   }
 }

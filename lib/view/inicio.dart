@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ligafut_app/view/mostrar_equipos.dart';
 import 'tabla_posiciones.dart';
 
-<<<<<<< HEAD:lib/view/principal.dart
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({Key? key}) : super(key: key);
 
@@ -14,13 +14,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   final List<Widget> _screens = [
     CalendariosScreen(),
-    EquiposScreen(),
+    ListaEquiposPantalla(),
     TablaPosicionesScreen(),
   ];
-=======
-class PantallaInicio extends StatelessWidget {
-  const PantallaInicio({super.key});
->>>>>>> ee138ef9101b9da258e1a2940f321c2c6bc310e4:lib/view/inicio.dart
 
   @override
   Widget build(BuildContext context) {
