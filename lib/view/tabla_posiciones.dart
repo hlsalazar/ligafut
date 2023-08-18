@@ -1,217 +1,136 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Equipo {
-  final String nombre;
-  final int puntos;
-  final int partidosJugados;
-  final int partidosGanados;
-  final int partidosEmpatados;
-  final int partidosPerdidos;
-  final int golesFavor;
-  final int golesContra;
+import '../models/equipo.dart';
 
-  Equipo({
-    required this.nombre,
-    required this.puntos,
-    required this.partidosJugados,
-    required this.partidosGanados,
-    required this.partidosEmpatados,
-    required this.partidosPerdidos,
-    required this.golesFavor,
-    required this.golesContra,
-  });
+class TablaPosicionesScreen extends StatefulWidget {
+  const TablaPosicionesScreen({super.key});
+
+  @override
+  State<TablaPosicionesScreen> createState() => _ListaEquiposPantallaState();
 }
 
-class TablaPosicionesScreen extends StatelessWidget {
-  final List<Equipo> equipos = [
-    Equipo(
-      nombre: 'Equipo A',
-      puntos: 15,
-      partidosJugados: 10,
-      partidosGanados: 7,
-      partidosEmpatados: 1,
-      partidosPerdidos: 2,
-      golesFavor: 20,
-      golesContra: 10,
-    ),
-    Equipo(
-      nombre: 'Equipo B',
-      puntos: 12,
-      partidosJugados: 8,
-      partidosGanados: 6,
-      partidosEmpatados: 0,
-      partidosPerdidos: 2,
-      golesFavor: 15,
-      golesContra: 8,
-    ),
-    Equipo(
-      nombre: 'Equipo C',
-      puntos: 18,
-      partidosJugados: 12,
-      partidosGanados: 9,
-      partidosEmpatados: 0,
-      partidosPerdidos: 3,
-      golesFavor: 25,
-      golesContra: 12,
-    ),
-    Equipo(
-      nombre: 'Equipo D',
-      puntos: 10,
-      partidosJugados: 9,
-      partidosGanados: 3,
-      partidosEmpatados: 1,
-      partidosPerdidos: 5,
-      golesFavor: 12,
-      golesContra: 18,
-    ),
-  ];
+class _ListaEquiposPantallaState extends State<TablaPosicionesScreen> {
+  bool _showHelp = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tabla de Posiciones'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.help_outline),
-            onPressed: () => _showHelpDialog(context),
-          ),
-        ],
+        title: const Text('Tabla de Posiciones'),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Tabla de Posiciones',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 16),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: equipos.length,
-                itemBuilder: (context, index) {
-                  final equipo = equipos[index];
-                  return _buildEquipoTile(equipo);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEquipoTile(Equipo equipo) {
-    return Card(
-      elevation: 4,
-      margin: EdgeInsets.symmetric(vertical: 8),
-      color: Colors.red[50],
-      child: ExpansionTile(
-        title: Text(
-          equipo.nombre,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(
-          'Puntos: ${equipo.puntos}',
-          style: TextStyle(color: Colors.black),
-        ),
-        leading: CircleAvatar(
-          backgroundColor: Colors.red,
-          child: Text(
-            equipo.nombre[0],
-            style: TextStyle(fontSize: 18, color: Colors.white),
-          ),
-        ),
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Table(
-              defaultColumnWidth: IntrinsicColumnWidth(),
-              border: TableBorder.all(color: Colors.black26),
+        child: Column(
+          children: [
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TableRow(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                  ),
-                  children: [
-                    TableCell(child: _buildTableCell('P')),
-                    TableCell(child: _buildTableCell('G')),
-                    TableCell(child: _buildTableCell('E')),
-                    TableCell(child: _buildTableCell('P')),
-                    TableCell(child: _buildTableCell('GF')),
-                    TableCell(child: _buildTableCell('GC')),
-                    TableCell(child: _buildTableCell('DG')),
-                  ],
+                IconButton(
+                  icon: Icon(Icons.help),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Ayuda'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('P = Partidos jugados'),
+                              Text('G = Partidos ganados'),
+                              Text('E = Partidos empatados'),
+                              Text('P = Partidos perdidos'),
+                              Text('GF = Goles a favor'),
+                              Text('GC = Goles en contra'),
+                              Text('DG = Diferencia de goles'),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cerrar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
-                TableRow(
-                  children: [
-                    TableCell(child: _buildTableCell('${equipo.partidosJugados}')),
-                    TableCell(child: _buildTableCell('${equipo.partidosGanados}')),
-                    TableCell(child: _buildTableCell('${equipo.partidosEmpatados}')),
-                    TableCell(child: _buildTableCell('${equipo.partidosPerdidos}')),
-                    TableCell(child: _buildTableCell('${equipo.golesFavor}')),
-                    TableCell(child: _buildTableCell('${equipo.golesContra}')),
-                    TableCell(
-                      child: _buildTableCell(
-                        '${equipo.golesFavor - equipo.golesContra}',
-                      ),
-                    ),
-                  ],
-                ),
+                Text('Ayuda'),
               ],
             ),
-          ),
-        ],
+            SizedBox(height: 16),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('equipos').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+                List<Equipo> listaEquipos = [];
+                snapshot.data!.docs.forEach((document) {
+                  var data = document.data() as Map<String, dynamic>;
+                  String nombreEquipo = data['NombreEquipo'];
+                  String capitan = data['Capitan'];
+                  String ciudad = data['Ciudad'];
+                  listaEquipos.add(Equipo(
+                      nombreEquipo: nombreEquipo, capitan: capitan, ciudad: ciudad));
+                });
+
+                listaEquipos.sort((a, b) {
+                  // Ordena los equipos según su posición en la tabla (puedes cambiar el criterio)
+                  // Por ejemplo, podrías ordenar por puntaje descendente
+                  // o por diferencia de goles, etc.
+                  // Asegúrate de definir tu propio criterio de ordenamiento aquí.
+                  return 0;
+                });
+
+                int posicion = 1;
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: DataTable(
+                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                      columns: [
+                        DataColumn(label: Text('Pos')),
+                        DataColumn(label: Text('Equipo')),
+                        DataColumn(label: Text('P')),
+                        DataColumn(label: Text('G')),
+                        DataColumn(label: Text('E')),
+                        DataColumn(label: Text('P')),
+                        DataColumn(label: Text('GF')),
+                        DataColumn(label: Text('GC')),
+                        DataColumn(label: Text('DG')),
+                      ],
+                      rows: listaEquipos.map((equipo) {
+                        final DataRow dataRow = DataRow(cells: [
+                          DataCell(Text('$posicion')),
+                          DataCell(Text(equipo.nombreEquipo)),
+                          DataCell(Text('10')), // Partidos jugados
+                          DataCell(Text('7')),  // Partidos ganados
+                          DataCell(Text('2')),  // Partidos empatados
+                          DataCell(Text('1')),  // Partidos perdidos
+                          DataCell(Text('25')), // Goles a favor
+                          DataCell(Text('12')), // Goles en contra
+                          DataCell(Text('13')), // Diferencia de goles
+                        ]);
+
+                        posicion++;
+                        return dataRow;
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
-
-  Widget _buildTableCell(String text) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Text(text, textAlign: TextAlign.center),
-    );
-  }
-
-  void _showHelpDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Ayuda'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('P = Partidos jugados'),
-              Text('G = Partidos ganados'),
-              Text('E = Partidos empatados'),
-              Text('P = Partidos perdidos'),
-              Text('GF = Goles a favor'),
-              Text('GC = Goles en contra'),
-              Text('DG = Diferencia de goles'),
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cerrar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: TablaPosicionesScreen(),
-  ));
 }

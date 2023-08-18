@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ligafut_app/view/CalendarPage.dart';
 import 'package:ligafut_app/view/mostrar_equipos.dart';
 import 'tabla_posiciones.dart';
 
@@ -13,7 +14,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    CalendariosScreen(),
+    CalendarPage(),
     ListaEquiposPantalla(),
     TablaPosicionesScreen(),
   ];

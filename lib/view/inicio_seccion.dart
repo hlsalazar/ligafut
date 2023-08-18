@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ligafut_app/View/registro.dart';
-<<<<<<< HEAD
-import 'package:ligafut_app/view/inicio.dart';
-=======
 import 'package:ligafut_app/view/CalendarPage.dart';
->>>>>>> calendario_partidos
+import 'package:ligafut_app/view/inicio.dart';
 
 class InicioSeccionPantalla extends StatefulWidget {
   const InicioSeccionPantalla({super.key});
@@ -151,12 +148,7 @@ class _InicioSeccionPantallaState extends State<InicioSeccionPantalla> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-<<<<<<< HEAD
                 builder: (context) => const PantallaPrincipal(),
-=======
-                builder: (context) =>
-                    CalendarPage(), // Reemplaza OtraPagina por el nombre de la clase de tu otra pantalla.
->>>>>>> calendario_partidos
               ),
             );
           } else {
