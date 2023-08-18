@@ -10,3 +10,4 @@ class Equipo {
       required this.capitan,
       required this.ciudad});
 }
+//equipos
