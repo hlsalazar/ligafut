@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tabla_posiciones.dart';
 
+<<<<<<< HEAD:lib/view/principal.dart
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({Key? key}) : super(key: key);
 
@@ -16,12 +17,16 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     EquiposScreen(),
     TablaPosicionesScreen(),
   ];
+=======
+class PantallaInicio extends StatelessWidget {
+  const PantallaInicio({super.key});
+>>>>>>> ee138ef9101b9da258e1a2940f321c2c6bc310e4:lib/view/inicio.dart
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inicio'),
+        title: const Text('Inicio Seccion'),
       ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
