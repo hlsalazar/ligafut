@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 import 'dart:math';
 
@@ -10,6 +12,10 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
+
   List<dynamic> _teams = []; // Lista de nombres de equipos
   List<List<String>> _matches = []; // Lista de partidos por jornada
 
@@ -46,12 +52,29 @@ class _CalendarPageState extends State<CalendarPage> {
 
         String matchDetails =
             "${_teams[home]} vs ${_teams[away]} - ${_generateRandomDate()}";
+
+      int goalsLocal = _generateRandomGoals();
+      int goalsVisitor = _generateRandomGoals();
+        // Guardar el partido en Firebase
+      _firestore.collection('partidos').add({
+        'equipo_local': _teams[home],
+        'equipo_visitante': _teams[away],
+        'fecha': _generateRandomDate(),
+        'goles_local': goalsLocal,
+        'goles_visitante': goalsVisitor,
+      });
+
         roundMatches.add(matchDetails);
       }
 
       _matches.add(roundMatches);
     }
   }
+
+  int _generateRandomGoals() {
+  final random = Random();
+  return random.nextInt(5); // Genera un número aleatorio de goles entre 0 y 4
+}
 
   String _generateRandomDate() {
     final random = Random();
