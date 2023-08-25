@@ -95,7 +95,7 @@ class _TablaPosicionesScreenState extends State<TablaPosicionesScreen2> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: DataTable(
-                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                       columns: [
                         DataColumn(label: Text('Pos')),
                         DataColumn(label: Text('Equipo')),
