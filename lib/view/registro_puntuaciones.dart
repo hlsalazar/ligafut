@@ -25,7 +25,7 @@ class _ListaPartidosPantallaState extends State<ListaPartidosPantalla> {
             var data = document.data() as Map<String, dynamic>;
             String equipoLocal = data['equipo_local'];
             String equipoVisitante = data['equipo_visitante'];
-            String fecha = data['fecha']; // Utilizamos el campo de tipo String
+            String fecha = data['fecha'];
             int golesLocal = data['goles_local'];
             int golesVisitante = data['goles_visitante'];
 
@@ -53,7 +53,7 @@ class _ListaPartidosPantallaState extends State<ListaPartidosPantalla> {
 class Partido {
   final String equipoLocal;
   final String equipoVisitante;
-  final String fecha; // Mantenemos el campo de tipo String
+  final String fecha;
   final int golesLocal;
   final int golesVisitante;
 
@@ -76,25 +76,103 @@ class TarjetaPartido extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${partido.equipoLocal} vs ${partido.equipoVisitante}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text('Fecha: ${partido.fecha}', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 8),
-            Text(
-              'Resultado: ${partido.golesLocal} - ${partido.golesVisitante}',
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
+      child: InkWell(
+        onTap: () {
+          _showScoreDialog(context, partido);
+        },
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${partido.equipoLocal} vs ${partido.equipoVisitante}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text('Fecha: ${partido.fecha}', style: TextStyle(fontSize: 16)),
+              SizedBox(height: 8),
+              Text(
+                'Resultado: ${partido.golesLocal} - ${partido.golesVisitante}',
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  void _showScoreDialog(BuildContext context, Partido partido) {
+    int golesLocal = partido.golesLocal;
+    int golesVisitante = partido.golesVisitante;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('Registrar Goles'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('${partido.equipoLocal} vs ${partido.equipoVisitante}'),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('${partido.equipoLocal}:'),
+                  DropdownButton<int>(
+                    value: golesLocal,
+                    onChanged: (value) {
+                      golesLocal = value!;
+                    },
+                    items: List.generate(11, (index) => index).map((int value) {
+                      return DropdownMenuItem<int>(
+                        value: value,
+                        child: Text(value.toString()),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('${partido.equipoVisitante}:'),
+                  DropdownButton<int>(
+                    value: golesVisitante,
+                    onChanged: (value) {
+                      golesVisitante = value!;
+                    },
+                    items: List.generate(11, (index) => index).map((int value) {
+                      return DropdownMenuItem<int>(
+                        value: value,
+                        child: Text(value.toString()),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Puedes manejar aquí la lógica para registrar los goles
+                Navigator.of(dialogContext).pop();
+              },
+              child: Text('Guardar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
