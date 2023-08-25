@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ligafut_app/view/TeamRegistrationPage.dart';
+import 'package:ligafut_app/view/registro_puntuaciones.dart';
 import 'package:ligafut_app/view/tabla_posiciones2.dart';
 import 'CalendarPage.dart';
 import 'mostrar_equipos.dart';
-import 'tabla_posiciones.dart';
+//import 'tabla_posiciones.dart';
+//import 'registro_puntuaciones.dart'
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     //TablaPosicionesScreen(),
     ListaEquiposPantalla(),
     TablaPosicionesScreen2()
+    //PartidoDetailPagesta()
   ];
 
   @override
@@ -50,6 +53,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
             label: 'Tabla',
+          ),
+            BottomNavigationBarItem(
+            icon: Icon(Icons.group),
+            label: 'Anotar Resultados',
           ),
         ],
       ),
