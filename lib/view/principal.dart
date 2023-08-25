@@ -21,8 +21,8 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     TeamRegistrationPage(),
     //TablaPosicionesScreen(),
     ListaEquiposPantalla(),
-    TablaPosicionesScreen2()
-    //PartidoDetailPagesta()
+    TablaPosicionesScreen2(),
+    ListaPartidosPantalla()
   ];
 
   @override

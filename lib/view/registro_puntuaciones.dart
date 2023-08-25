@@ -1,103 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PartidoDetailPage extends StatefulWidget {
-  final DocumentSnapshot partidoDocument;
-
-  PartidoDetailPage({required this.partidoDocument});
-
+class ListaPartidosPantalla extends StatefulWidget {
   @override
-  _PartidoDetailPageState createState() => _PartidoDetailPageState();
+  _ListaPartidosPantallaState createState() => _ListaPartidosPantallaState();
 }
 
-class _PartidoDetailPageState extends State<PartidoDetailPage> {
-  void _showEditDialog(BuildContext context, DocumentReference partidoRef) {
-    int golesLocal = widget.partidoDocument['goles_local'] ?? 0;
-    int golesVisitante = widget.partidoDocument['goles_visitante'] ?? 0;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Editar Resultado'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                keyboardType: TextInputType.number,
-                initialValue: golesLocal.toString(),
-                onChanged: (value) {
-                  golesLocal = int.parse(value);
-                },
-                decoration: InputDecoration(labelText: 'Goles Local'),
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                initialValue: golesVisitante.toString(),
-                onChanged: (value) {
-                  golesVisitante = int.parse(value);
-                },
-                decoration: InputDecoration(labelText: 'Goles Visitante'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                partidoRef.update({
-                  'goles_local': golesLocal,
-                  'goles_visitante': golesVisitante,
-                });
-
-                Navigator.of(context).pop();
-              },
-              child: Text('Guardar'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancelar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+class _ListaPartidosPantallaState extends State<ListaPartidosPantalla> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Detalle del Partido')),
-      body: StreamBuilder(
-        stream: widget.partidoDocument.reference.snapshots(),
+      appBar: AppBar(
+        title: const Text('Lista de Partidos'),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('partidos').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return CircularProgressIndicator();
           }
 
-          var partidoData = snapshot.data!.data() as Map<String, dynamic>;
-          var partidoRef = widget.partidoDocument.reference;
+          List<Partido> listaPartidos = [];
+          snapshot.data!.docs.forEach((document) {
+            var data = document.data() as Map<String, dynamic>;
+            String equipoLocal = data['equipo_local'];
+            String equipoVisitante = data['equipo_visitante'];
+            String fecha = data['fecha']; // Utilizamos el campo de tipo String
+            int golesLocal = data['goles_local'];
+            int golesVisitante = data['goles_visitante'];
 
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Equipo Local: ${partidoData['equipo_local']}'),
-                Text('Equipo Visitante: ${partidoData['equipo_visitante']}'),
-                Text('Goles Local: ${partidoData['goles_local'] ?? 'No registrado'}'),
-                Text('Goles Visitante: ${partidoData['goles_visitante'] ?? 'No registrado'}'),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    _showEditDialog(context, partidoRef);
-                  },
-                  child: Text('Editar Resultado'),
-                ),
-              ],
-            ),
+            listaPartidos.add(Partido(
+              equipoLocal: equipoLocal,
+              equipoVisitante: equipoVisitante,
+              fecha: fecha,
+              golesLocal: golesLocal,
+              golesVisitante: golesVisitante,
+            ));
+          });
+
+          return ListView.builder(
+            itemCount: listaPartidos.length,
+            itemBuilder: (context, index) {
+              return TarjetaPartido(partido: listaPartidos[index]);
+            },
           );
         },
+      ),
+    );
+  }
+}
+
+class Partido {
+  final String equipoLocal;
+  final String equipoVisitante;
+  final String fecha; // Mantenemos el campo de tipo String
+  final int golesLocal;
+  final int golesVisitante;
+
+  Partido({
+    required this.equipoLocal,
+    required this.equipoVisitante,
+    required this.fecha,
+    required this.golesLocal,
+    required this.golesVisitante,
+  });
+}
+
+class TarjetaPartido extends StatelessWidget {
+  final Partido partido;
+
+  TarjetaPartido({required this.partido});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${partido.equipoLocal} vs ${partido.equipoVisitante}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text('Fecha: ${partido.fecha}', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 8),
+            Text(
+              'Resultado: ${partido.golesLocal} - ${partido.golesVisitante}',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }
