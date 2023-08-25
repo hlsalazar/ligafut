@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ligafut_app/View/inicio_seccion.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ligafut_app/view/inicio_sesion.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: const InicioSeccionPantalla(),
+      home: const IniciarSesionPantalla(),
     );
   }
 }

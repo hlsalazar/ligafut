@@ -53,8 +53,8 @@ class _CalendarPageState extends State<CalendarPage> {
         String matchDetails =
             "${_teams[home]} vs ${_teams[away]} - ${_generateRandomDate()}";
 
-      int goalsLocal = _generateRandomGoals();
-      int goalsVisitor = _generateRandomGoals();
+      int goalsLocal = 999;
+      int goalsVisitor = 999;
         // Guardar el partido en Firebase
       _firestore.collection('partidos').add({
         'equipo_local': _teams[home],
@@ -93,11 +93,11 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: _getTeams,
-              child: Text('Obtener Equipos'),
-            ),
-            ElevatedButton(
-              onPressed: _generateMatchSchedule,
+              onPressed: (){
+                _getTeams();
+                _generateMatchSchedule();
+                _getTeams();
+              } ,
               child: Text('Generar Calendario'),
             ),
             SizedBox(height: 20),

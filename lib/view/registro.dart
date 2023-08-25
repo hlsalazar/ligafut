@@ -12,84 +12,83 @@ class _RegistroPantallaState extends State<RegistroPantalla> {
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _correoController = TextEditingController();
   final TextEditingController _contrasenaController = TextEditingController();
+  var nombrePantalla = 'Registro';
+  var campoNombre = 'NOMBRE COMPLETO: ';
+  var campoCorreo = 'CORREO ELECTRÓNICO: ';
+  var campoContrasenia = 'CONTRASEÑA: ';
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Registro de Usuario'),
-      // ),
-      body: Stack(children: [
-        Positioned(
-          top: -130,
-          left: 150,
-          child: Container(
-            width: 200,
-            height: 200,
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey, // Color gris de la sombra
-                  blurRadius: 10, // Radio del desenfoque de la sombra
-                  spreadRadius: 2, // Radio de expansión de la sombra
-                  offset: Offset(0, 2), // Desplazamiento de la sombra en X e Y
-                ),
-              ],
+      appBar: AppBar(
+        toolbarHeight: 40,
+      ),
+      body: Container(
+        width: 400,
+        height: 400,
+        margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        // margin: EdgeInsets.fromLTRB(left, top, right, bottom),
+        //decoration: BoxDecoration(border: Border.all()),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              nombrePantalla,
+              style: const TextStyle(
+                  color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
             ),
-          ),
+            Text(campoNombre),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Nombre',
+                filled: true,
+                fillColor: Color.fromARGB(136, 185, 188, 189),
+              ),
+              keyboardType: TextInputType.text,
+              controller: _nombreController,
+            ),
+            Text(campoCorreo),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Correo',
+                filled: true,
+                fillColor: Color.fromARGB(136, 185, 188, 189),
+              ),
+              keyboardType: TextInputType.text,
+              controller: _correoController,
+            ),
+            Text(campoContrasenia),
+            TextField(
+              controller: _contrasenaController,
+              decoration: const InputDecoration(
+                filled: true,
+                hintText: 'Contraseña',
+                fillColor: Color.fromARGB(136, 185, 188, 189),
+              ),
+              obscureText: true,
+            ),
+            Center(
+              child: SizedBox(
+                  width: 300,
+                  height: 50,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0))),
+                      onPressed: () async {
+                        await registroUsuario(
+                                _nombreController.text,
+                                _correoController.text,
+                                _contrasenaController.text)
+                            .then((value) => Navigator.pop(context));
+                      },
+                      child: const Text('Registarse'))),
+            )
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildTextFieldWithIcon(
-                controller: _nombreController,
-                labelText: 'Nombre',
-                icon: Icons.person,
-              ),
-              const SizedBox(height: 16),
-              _buildTextFieldWithIcon(
-                controller: _correoController,
-                labelText: 'Correo electrónico',
-                icon: Icons.email,
-              ),
-              const SizedBox(height: 16),
-              _buildTextFieldWithIcon(
-                controller: _contrasenaController,
-                labelText: 'Contraseña',
-                icon: Icons.lock,
-                isPassword: true,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: 500, // Ancho deseado del botón
-                height: 50, // Alto deseado del botón
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green),
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  onPressed: () async {
-                    await registroUsuario(_nombreController.text,
-                            _correoController.text, _contrasenaController.text)
-                        .then((value) => Navigator.pop(context));
-                  },
-                  child: const Text(
-                    "Registrarte",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ]),
+      ),
     );
   }
 
