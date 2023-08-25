@@ -59,12 +59,12 @@ class TarjetaEquipo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Equipo: ${equipo.nombreEquipo}',
+            Text('⚽ ${equipo.nombreEquipo}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
             Text('Capitán: ${equipo.capitan}', style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
-            Text('Ciudad: ${equipo.ciudad}', style: TextStyle(fontSize: 16)),
+            Text('🇪🇨 ${equipo.ciudad}', style: TextStyle(fontSize: 16)),
           ],
         ),
       ),
