@@ -23,6 +23,7 @@ class _ListaPartidosPantallaState extends State<ListaPartidosPantalla> {
           List<Partido> listaPartidos = [];
           snapshot.data!.docs.forEach((document) {
             var data = document.data() as Map<String, dynamic>;
+            String id = document.id;
             String equipoLocal = data['equipo_local'];
             String equipoVisitante = data['equipo_visitante'];
             String fecha = data['fecha'];
@@ -30,6 +31,7 @@ class _ListaPartidosPantallaState extends State<ListaPartidosPantalla> {
             int golesVisitante = data['goles_visitante'];
 
             listaPartidos.add(Partido(
+              id: id,
               equipoLocal: equipoLocal,
               equipoVisitante: equipoVisitante,
               fecha: fecha,
@@ -51,6 +53,7 @@ class _ListaPartidosPantallaState extends State<ListaPartidosPantalla> {
 }
 
 class Partido {
+  final String id;
   final String equipoLocal;
   final String equipoVisitante;
   final String fecha;
@@ -58,6 +61,7 @@ class Partido {
   final int golesVisitante;
 
   Partido({
+    required this.id,
     required this.equipoLocal,
     required this.equipoVisitante,
     required this.fecha,
@@ -66,10 +70,25 @@ class Partido {
   });
 }
 
-class TarjetaPartido extends StatelessWidget {
+class TarjetaPartido extends StatefulWidget {
   final Partido partido;
 
   TarjetaPartido({required this.partido});
+
+  @override
+  _TarjetaPartidoState createState() => _TarjetaPartidoState();
+}
+
+class _TarjetaPartidoState extends State<TarjetaPartido> {
+  late int golesLocal;
+  late int golesVisitante;
+
+  @override
+  void initState() {
+    super.initState();
+    golesLocal = widget.partido.golesLocal;
+    golesVisitante = widget.partido.golesVisitante;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +97,7 @@ class TarjetaPartido extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
         onTap: () {
-          _showScoreDialog(context, partido);
+          _showScoreDialog(context, widget.partido);
         },
         child: Padding(
           padding: EdgeInsets.all(16),
@@ -86,14 +105,14 @@ class TarjetaPartido extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${partido.equipoLocal} vs ${partido.equipoVisitante}',
+                '${widget.partido.equipoLocal} vs ${widget.partido.equipoVisitante}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              Text('Fecha: ${partido.fecha}', style: TextStyle(fontSize: 16)),
+              Text('Fecha: ${widget.partido.fecha}', style: TextStyle(fontSize: 16)),
               SizedBox(height: 8),
               Text(
-                'Resultado: ${partido.golesLocal} - ${partido.golesVisitante}',
+                'Resultado: $golesLocal - $golesVisitante',
                 style: TextStyle(fontSize: 16),
               ),
             ],
@@ -104,9 +123,6 @@ class TarjetaPartido extends StatelessWidget {
   }
 
   void _showScoreDialog(BuildContext context, Partido partido) {
-    int golesLocal = partido.golesLocal;
-    int golesVisitante = partido.golesVisitante;
-
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -124,7 +140,9 @@ class TarjetaPartido extends StatelessWidget {
                   DropdownButton<int>(
                     value: golesLocal,
                     onChanged: (value) {
-                      golesLocal = value!;
+                      setState(() {
+                        golesLocal = value!;
+                      });
                     },
                     items: List.generate(11, (index) => index).map((int value) {
                       return DropdownMenuItem<int>(
@@ -143,7 +161,9 @@ class TarjetaPartido extends StatelessWidget {
                   DropdownButton<int>(
                     value: golesVisitante,
                     onChanged: (value) {
-                      golesVisitante = value!;
+                      setState(() {
+                        golesVisitante = value!;
+                      });
                     },
                     items: List.generate(11, (index) => index).map((int value) {
                       return DropdownMenuItem<int>(
@@ -164,8 +184,16 @@ class TarjetaPartido extends StatelessWidget {
               child: Text('Cancelar'),
             ),
             ElevatedButton(
-              onPressed: () {
-                // Puedes manejar aquí la lógica para registrar los goles
+              onPressed: () async {
+                // Actualizar los goles en Firebase Firestore
+                await FirebaseFirestore.instance
+                    .collection('partidos')
+                    .doc(partido.id)
+                    .update({
+                  'goles_local': golesLocal,
+                  'goles_visitante': golesVisitante,
+                });
+
                 Navigator.of(dialogContext).pop();
               },
               child: Text('Guardar'),
@@ -175,4 +203,11 @@ class TarjetaPartido extends StatelessWidget {
       },
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    title: 'Actualización de Goles',
+    home: ListaPartidosPantalla(),
+  ));
 }
